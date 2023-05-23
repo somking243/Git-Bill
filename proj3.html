@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 14px;
+          }
+          
+          th, td {
+            text-align: left;
+            padding: 8px;
+          }
+          
+          th {
+            background-color: #333;
+            color: #fff;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f2f2f2;
+          }
+          
+          tr.b:hover {
+            background-color: #ddd;
+          }
+          
+          button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+          }
+          
+          button:hover {
+            background-color: #d43737;
+          }
+          
+          .borde{
+            border:1px solid black;
+          }
+        </style>
+</head>
+<body>
+  <button onClick="newEmp()">New Employee</button>
+  <button onClick="show(employees)">All Employee</button>
+  <button onClick="fullDump()">Full Dump</button>
+  <button onClick = "partDump()">Partial Dump</button><br><br>
+  <div id="data"></div>
+  
+  
+  <script>
+    
+    let employees =    [
+    {
+      empcode: 'A102',
+      name: 'James',
+      age: 37,
+      gender: 'Male',
+      department: 'Finance',
+      designation: 'Manager',
+      salary: 65000
+    },
+    {
+      empcode: 'A106',
+      name: 'Mary',
+      age: 24,
+      gender: 'Female',
+      department: 'Technology',
+      designation: 'Vice-President',
+      salary: 68000
+    },
+    {
+      empcode: 'A122',
+    name: 'Bob',
+    age: 23,
+    gender: 'Male',
+    department: 'Marketing',
+    designation: 'Manager',
+    salary: 51000
+  },
+  {
+    empcode: 'A088',
+    name: 'Julia',
+    age: 33,
+    gender: 'Female',
+    department: 'Finance',
+    designation: 'Vice-President',
+    salary: 70000
+  },
+  {
+    empcode: 'A055',
+    name: 'Steve',
+    age: 27,
+    gender: 'Male',
+    department: 'Technology',
+    designation: 'Manager',
+    salary: 53000
+  },
+  {
+    empcode: 'A208',
+    name: 'Katherine',
+    age: 29,
+    gender: 'Female',
+    department: 'Marketing',
+    designation: 'Manager',
+    salary: 61000
+  },
+  {
+    empcode: 'A181',
+    name: 'Edwards',
+    age: 31,
+    gender: 'Male',
+    department: 'Finance',
+    designation: 'Trainee',
+    salary: 49000
+  },
+  {
+    empcode: 'A028',
+    name: 'Margaret',
+    age: 32,
+    gender: 'Female',
+    department: 'Technology',
+    designation: 'President',
+    salary: 53000
+  },
+  {
+    empcode: 'A029',
+    name: 'Bill',
+    age: 27,
+    gender: 'Male',
+    department: 'Operations',
+    designation: 'Manager',
+    salary: 58000
+  }
+  ]
+  
+  function show(emp) {
+    let map1 = emp
+      .map(function (ele) {
+        let str = "<tr class='b'>";
+        str += "<td>" + ele.empcode + "</td>";
+        str += "<td>" + ele.name + "</td>";
+        str += "<td>" + ele.age + "</td>";
+        str += "<td>" + ele.gender + "</td>";
+        str += "<td>" + ele.department + "</td>";
+        str += "<td>" + ele.designation + "</td>";
+        str += "<td>" + ele.salary + "</td>";
+        str +=
+          "<td> <button onClick=\"edit('" +
+          ele.empcode +
+          "')\">Edit </button></td>";
+        str += "</tr>";
+        return str;
+      })
+      .join("");
+  
+    let head =
+      "<tr>" +
+      "<th onClick='sortTable(0)'>Emp Code</th>" +
+      "<th onClick='sortTable(1)'>Name</th>" +
+      "<th onClick='sortTable(2)'>Age</th>" +
+      "<th onClick='sortTable(3)'>Gender</th>" +
+      "<th onClick='sortTable(4)'>Department</th>" +
+      "<th onClick='sortTable(5)'>Designation</th>" +
+      "<th onClick='sortTable(6)'>Salary</th>" +
+      "<th></th>" +
+      "</tr>";
+  
+    let op =
+      "Filter Employees by Department<select id='fil1'>" +
+      "<option selected>Choose Department</option>" +
+      "<option>Finance</option>" +
+      "<option>Technology</option>" +
+      "<option>Marketing</option>" +
+      "<option>Operations</option>" +
+      "</select>";
+  
+    let op1 =
+      "<select id='fil2'>" +
+      "<option selected>Choose Designation</option>" +
+      "<option>Manager</option>" +
+      "<option>Vice-President</option>" +
+      "<option>Trainee</option>" +
+      "<option>President</option>" +
+      "</select>";
+  
+    let bt =
+      "<button onClick='filtered(employees)'>Filter</button>" +
+      "<br/><br/>";
+  
+    let html = op + op1 + bt + "<table>" + head + map1 + "</table>";
+    document.getElementById("data").innerHTML = html;
+  }
+  
+
+
+
+
+
+
+
+  function filtered(emp) {
+    let dept = document.getElementById("fil1").value;
+    let desig = document.getElementById("fil2").value;
+  
+    let filteredEmployees = emp.filter(function (e) {
+      return (
+        (e.department == dept || dept == "Choose Department") &&
+        (e.designation == desig || desig == "Choose Designation")
+      );
+    });
+  
+    show(filteredEmployees);
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+//sorting code
+
+
+
+function sortTable(colIndex) {
+  employees.sort(function(a, b) {
+    let colName = "";
+    switch(colIndex) {
+      case 0:
+        colName = "empcode";
+        break;
+      case 1:
+        colName = "name";
+        break;
+      case 2:
+        colName = "age";
+        break;
+      case 3:
+        colName = "gender";
+        break;
+      case 4:
+        colName = "department";
+        break;
+      case 5:
+        colName = "designation";
+        break;
+      case 6:
+        colName = "salary";
+        break;
+      default:
+        colName = "empcode";
+    }
+    let aVal = a[colName];
+    let bVal = b[colName];
+    if (typeof aVal === "string") {
+      aVal = aVal.toLowerCase();
+      bVal = bVal.toLowerCase();
+    }
+    if (aVal < bVal) {
+      return -1;
+    } else if (aVal > bVal) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  show(employees);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//form Code
+
+
+function newEmp() {
+  let str = 'Employee Code<input type="text" id="e1"> <br/><br/>';
+  str += 'Name <input type="text" id="e2"> <br/><br/>';
+  str += 'Age <input type="number" id="e3"> <br/><br/>';
+  str += 'Gender <input type="radio" name="gen" value="Male">Male <input type="radio" name="gen" value="Female">Female <br/><br/>';
+  let op = 'Department<select id="selec">';
+  op += '<option disabled selected>Choose Department</option>';
+  op += '<option>Finance</option>';
+  op += '<option>Technology</option>';
+  op += '<option>Marketing</option>';
+  op += '<option>Operations</option>';
+  op += '</select><br/><br/>';
+  let op1 = 'Designation<select id="depar">';
+  op1 += '<option disabled selected>Choose Designation</option>';
+  op1 += '<option>Manager</option>';
+  op1 += '<option>Vice-President</option>';
+  op1 += '<option>Trainee</option>';
+  op1 += '<option>President</option>';
+  op1 += '</select><br/><br/>';
+  let sal = 'Salary <input type="number" id="e5"><br/><br/>';
+  let bt = '<button onClick="addEmployee()">Add New Employee</button>';
+  let tot = str + op + op1 + sal + bt;
+  document.getElementById('data').innerHTML = tot;
+  
+}
+
+
+
+
+//form add on table with validation code
+
+function addEmployee() {
+  let id = document.getElementById('e1').value.trim();
+  let name = document.getElementById('e2').value.trim();
+  let age = document.getElementById('e3').value.trim();
+  let gender = document.querySelector('input[name="gen"]:checked');
+  let department = document.getElementById('selec').value.trim();
+  let designation = document.getElementById('depar').value.trim();
+  let salary = document.getElementById('e5').value.trim();
+
+  if (!id) {
+    alert("Employee ID is not filled");
+    return;
+  } else if (!name) {
+    alert("Name is not filled");
+    return;
+  } else if (!age ) {
+    alert("Age is not valid");
+    return;
+  } else if (!gender) {
+    alert("Gender is not selected");
+    return;
+  } else if (department === "Choose Department") {
+    alert("Department is not selected");
+    return;
+  } else if (designation === "Choose Designation") {
+    alert("Designation is not selected");
+    return;
+  } else if (!salary || salary < 0) {
+    alert("Salary is not valid");
+    return;
+  }
+
+  let found = employees.find(function(emp) {
+    return emp.empcode === id;
+  });
+
+  if (found) {
+    alert("This Employee ID already exists.");
+    return;
+  }
+
+  employees.push({ empcode: id, name: name, age: age, gender: gender.value, department: department, designation: designation, salary: salary });
+
+  alert("The employee's details have been added.");
+show(employees)
+  
+} 
+
+
+
+
+
+
+
+//edit....
+function edit(empcode) {
+  let employee = employees.find(function(emp){
+    return emp.empcode === empcode;
+  });
+
+  let str = 'Employee Code<input type="text" readonly id="v1" value="' + employee.empcode + '"> <br/><br/>';
+  str += 'Name <input type="text" id="v2" value="' + employee.name + '"> <br/><br/>';
+  str += 'Age <input type="number" id="v3" value="' + employee.age + '"> <br/><br/>';
+  str += 'Gender <input type="radio" name="gender" value="Male" ' + (employee.gender === "Male" ? "checked" : "") + '>Male <input type="radio" name="gender" value="Female" ' + (employee.gender === "Female" ? "checked" : "") + '>Female <br/><br/>';
+  let op = 'Department<select id="select">';
+  op += '<option disabled selected>Choose Department</option>';
+  op += '<option ' + (employee.department === "Finance" ? "selected" : "") + '>Finance</option>';
+  op += '<option ' + (employee.department === "Technology" ? "selected" : "") + '>Technology</option>';
+  op += '<option ' + (employee.department === "Marketing" ? "selected" : "") + '>Marketing</option>';
+  op += '<option ' + (employee.department === "Operations" ? "selected" : "") + '>Operations</option>';
+  op += '</select><br/><br/>';
+  let op1 = 'Designation<select id="department">';
+  op1 += '<option disabled selected>Choose Designation</option>';
+  op1 += '<option ' + (employee.designation === "Manager" ? "selected" : "") + '>Manager</option>';
+  op1 += '<option ' + (employee.designation === "Vice-President" ? "selected" : "") + '>Vice-President</option>';
+  op1 += '<option ' + (employee.designation === "Trainee" ? "selected" : "") + '>Trainee</option>';
+  op1 += '<option ' + (employee.designation === "President" ? "selected" : "") + '>President</option>';
+  op1 += '</select><br/><br/>';
+  let sal = 'Salary <input type="number" id="v5" value="' + employee.salary + '"><br/><br/>';
+  let bt = '<button onclick="save(\''+empcode+'\')">Save Changes</button>';
+  let tot = str + op + op1 + sal + bt;
+  document.getElementById('data').innerHTML = tot;
+}
+
+
+
+
+
+
+
+
+function save(empcode) {
+  
+  let id = document.getElementById("v1").value;
+  let name = document.getElementById("v2").value;
+  let age = (document.getElementById("v3").value);
+  let gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "";
+  let department = document.getElementById("select").value;
+  let designation = document.getElementById("department").value;
+  let salary =(document.getElementById("v5").value);
+
+
+  if (!name) {
+    alert("Name is not filled");
+    return;
+  } else if (!age || age < 0) {
+    alert("Age is not valid");
+    return;
+  } else if (!gender) {
+    alert("Gender is not selected");
+    return;
+  } else if (department === "Choose Department") {
+    alert("Department is not selected");
+    return;
+  } else if (designation === "Choose Designation") {
+    alert("Designation is not selected");
+    return;
+  } else if (!salary || salary < 0) {
+    alert("Salary is not valid");
+    return;
+  }
+
+
+  let found = employees.find(function(emp) {
+    return emp.empcode === id;
+  });
+
+  if (found && found.empcode !== empcode) {
+    alert("This Employee ID already exists.");
+    return;
+  }
+
+  employees = employees.map(function(emp) {
+    if (emp.empcode === empcode) {
+      return { empcode: id, name: name, age: age, gender: gender, department: department, designation: designation, salary: salary };
+    } else {
+      return emp;
+    }
+  });
+
+  alert("The employee's details have been updated.");
+  show(employees);
+}
+
+
+//Full Dump code
+
+
+           function fullDump() {
+            let map1 = employees.map(function(ele){
+              return { 
+                empcode: ele.empcode, 
+                name: ele.name, 
+                age: ele.age, 
+                gender: ele.gender, 
+                department: ele.department, 
+                designation: ele.designation, 
+                salary: ele.salary 
+              };
+            });
+       
+        
+            let outputDiv = '<div style="border: 1px solid black; padding: 10px;">' + JSON.stringify(map1) + '</div>';
+          
+            document.getElementById('data').innerHTML = outputDiv;
+          }
+          
+          
+          function partDump() {
+            let map1 = employees.map(function(ele){
+              return { 
+                empcode: ele.empcode, 
+                name: ele.name, 
+                age: ele.age,
+              };
+            });
+            
+          
+            let outputDiv = '<div style="border: 1px solid black; padding: 10px;">' + JSON.stringify(map1) + '</div>';
+          
+            document.getElementById('data').innerHTML = outputDiv;
+          }
+          
+
+  
+          
+
+          
+          
+</script>    
+    
+</body>
+</html>

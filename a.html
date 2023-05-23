@@ -1,0 +1,166 @@
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 20px;
+                font-size: 14px;
+              }
+              
+              th, td {
+                text-align: left;
+                padding: 8px;
+              }
+              
+              th {
+                background-color: #333;
+                color: #fff;
+              }
+              
+              tr:nth-child(even) {
+                background-color: #f2f2f2;
+              }
+              
+              tr.b:hover {
+                background-color: #ddd;
+              }
+              
+              button {
+                background-color: #333;
+                color: #fff;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+              }
+              
+              button:hover {
+                background-color: #d43737;
+              }
+              
+        </style>
+    </head>
+    <body>
+        <button>New Employee</button>
+        <button onClick="show()">All Employee</button>
+        <button>Full Dump</button>
+        <button>Partial Dump</button>
+
+
+<script>
+        function show() {
+            let map1 = employees.map(function(ele){
+                let str='<tr class="b">'
+                 str +='<td>'+ele.empcode+'</td>'
+                 str +='<td>'+ele.name+'</td>'
+                 str +='<td>'+ele.age+'</td>'
+                 str +='<td>'+ele.gender+'</td>'
+                 str +='<td>'+ele.department+'</td>'
+                 str +='<td>'+ele.designation+'</td>'
+                 str +='<td>'+ele.salary+'</td>'
+                 str +='<td> <button onClick=edit()>Edit </button></td>'
+                 str +='</tr>'
+                 return str;
+            }).join('')
+            let head = '<tr>'
+                head += '<th  onClick="sort()">Emp Code</th>'
+                head += '<th onClick="sort()">Name</th>'
+                head += '<th onClick="sort()">Age</th>'
+                head += '<th onClick="sort()">Gender</th>'
+                head += '<th onClick="sort()">Department</th>'
+                head += '<th onClick="sort()">Desgination</th>'
+                head += '<th onClick="sort()">Salry</th>'
+                head += '<th onClick="sort()"></th>'
+                head += '</tr>'
+    
+    
+                let op='Filter Employees by Department<select id="fil1">'
+                    op +='<option selected>Choose Department </option>'
+                    op +='<option>Finance </option>'
+                    op +='<option> Technology</option>'
+                    op +='<option>Marketing </option>'
+                    op +='<option>Operations </option>'
+                    op += '</select>'
+    
+    
+                let op1 ='<select id="fil2">'
+                    op1 +='<option selected>Choose Designation </option>'
+                    op1 +='<option>Manager </option>'
+                    op1 +='<option>Vice-President</option>'
+                    op1 +='<option>Trainee</option>'
+                    op1 +='<option>President </option>'
+                    op1 += '</select>'
+                    let bt ='<button onClick="filter()">Filter</button>'
+    
+                let html = op+op1+bt+ '<br/>' +'<br/>'+'<table>'+head+map1+'</table>'
+                document.getElementById('data').innerHTML=html
+    
+    
+            }
+
+            function filter() {
+                let dept = document.getElementById("fil1").value;
+                let desig = document.getElementById("fil2").value;
+              
+                let filteredEmployees = employees.filter(function (emp) {
+                  return (emp.department === dept || dept === "Choose Department") &&
+                         (emp.designation === desig || desig === "Choose Designation");
+                });
+              
+                let map1 = filteredEmployees.map(function(ele){
+                  let str='<tr class="b">'
+                   str +='<td>'+ele.empcode+'</td>'
+                   str +='<td>'+ele.name+'</td>'
+                   str +='<td>'+ele.age+'</td>'
+                   str +='<td>'+ele.gender+'</td>'
+                   str +='<td>'+ele.department+'</td>'
+                   str +='<td>'+ele.designation+'</td>'
+                   str +='<td>'+ele.salary+'</td>'
+                   str +='<td> <button onClick=edit()>Edit </button></td>'
+                   str +='</tr>'
+                   return str;
+                }).join('')
+              
+                let head = '<tr>'
+                  head += '<th  onClick="sort()">Emp Code</th>'
+                  head += '<th onClick="sort()">Name</th>'
+                  head += '<th onClick="sort()">Age</th>'
+                  head += '<th onClick="sort()">Gender</th>'
+                  head += '<th onClick="sort()">Department</th>'
+                  head += '<th onClick="sort()">Desgination</th>'
+                  head += '<th onClick="sort()">Salry</th>'
+                  head += '<th onClick="sort()"></th>'
+                  head += '</tr>'
+              
+                let op='Filter Employees by Department<select id="fil1">'
+                    op +='<option selected>Choose Department </option>'
+                    op +='<option>Finance </option>'
+                    op +='<option> Technology</option>'
+                    op +='<option>Marketing </option>'
+                    op +='<option>Operations </option>'
+                    op += '</select>'
+              
+                let op1 ='<select id="fil2">'
+                    op1 +='<option selected>Choose Designation </option>'
+                    op1 +='<option>Manager </option>'
+                    op1 +='<option>Vice-President</option>'
+                    op1 +='<option>Trainee</option>'
+                    op1 +='<option>President </option>'
+                    op1 += '</select>'
+                let bt ='<button onClick="filter()">Filter</button>'
+              
+                let html = op+op1+bt+ '<br/>' +'<br/>'+'<table>'+head+map1+'</table>'
+                document.getElementById('data').innerHTML=html
+              }
+              
+</script>    
+        
+    </body>
+    </html>
